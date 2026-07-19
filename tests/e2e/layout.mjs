@@ -26,6 +26,15 @@ async function runDesktop(browser) {
   await page.waitForTimeout(500);
   await shot(page, "01-start-desktop");
 
+  const startCard = await page.evaluate(() => {
+    const r = document.querySelector(".start-card")?.getBoundingClientRect();
+    return r ? { top: r.top, bottom: r.bottom, height: r.height, vh: innerHeight } : null;
+  });
+  logs.push(`desktop start card: ${JSON.stringify(startCard)}`);
+  if (!startCard || startCard.top < 6 || startCard.bottom > startCard.vh - 6) {
+    errors.push(`desktop start card clipped: ${JSON.stringify(startCard)}`);
+  }
+
   // Click Play
   await page.click("#btn-start");
   await page.waitForTimeout(600);
@@ -189,6 +198,29 @@ async function runMobilePortrait(browser) {
   await page.close();
 }
 
+async function runShortDesktop(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 700 } });
+  page.on("pageerror", (e) => errors.push(`[short-desktop] ${e.message}`));
+  await page.goto(`${BASE}/games/pagoda-patch/`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(300);
+  const geometry = await page.evaluate(() => {
+    const card = document.querySelector(".start-card")?.getBoundingClientRect();
+    const screen = document.querySelector("#start-screen");
+    return {
+      card: card && { top: card.top, bottom: card.bottom, height: card.height },
+      vh: innerHeight,
+      scrollHeight: screen?.scrollHeight,
+      clientHeight: screen?.clientHeight,
+    };
+  });
+  logs.push(`short desktop start card: ${JSON.stringify(geometry)}`);
+  await shot(page, "06-start-short-desktop");
+  if (!geometry.card || geometry.card.top < 6 || geometry.card.bottom > geometry.vh - 6) {
+    errors.push(`short desktop start card clipped: ${JSON.stringify(geometry)}`);
+  }
+  await page.close();
+}
+
 async function runHub(browser) {
   const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });
   page.on("pageerror", (e) => errors.push(`[hub] ${e.message}`));
@@ -205,6 +237,7 @@ const browser = await chromium.launch({ headless: true });
 try {
   await runHub(browser);
   await runDesktop(browser);
+  await runShortDesktop(browser);
   await runMobileLandscape(browser);
   await runMobilePortrait(browser);
 } finally {
