@@ -638,6 +638,63 @@ async function testChapter(browser) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// 5b · Route book
+//
+// Every tab must render inside the viewport. This exists because the journal's
+// `.jentry.keepsake` once collided with the SCENE's `.keepsake` rule and inherited
+// position:absolute + a translate, throwing the list across the screen. Generic
+// class names are the hazard; this catches the whole family of it.
+// ═══════════════════════════════════════════════════════════
+async function testJournal(browser) {
+  const { context, page } = await open(browser, 1100, 700, "journal");
+  await page.goto(GAME, { waitUntil: "networkidle" });
+  await page.evaluate(() => {
+    const S = window.TrailSystems;
+    S.reset();
+    S.record("letters", "yangon"); S.record("fragments", "yangon");
+    S.record("people", "u-ba-nyein"); S.record("people", "u-sein-hla");
+    S.record("keepsakes", "ticket");
+    window.TrailDebug.unlockAll();
+  });
+  await page.click("#btn-start");
+  await page.waitForTimeout(200);
+  await page.evaluate(() => {
+    const S = window.TrailSystems;
+    S.record("letters", "yangon"); S.record("fragments", "yangon");
+    S.record("people", "u-ba-nyein"); S.record("people", "u-sein-hla");
+    S.record("keepsakes", "ticket");
+  });
+  await page.click("#btn-map-journal");
+  await page.waitForTimeout(300);
+  if (!(await page.locator("#journal-screen.active").count())) fail("journal: did not open");
+
+  for (const tab of ["letters", "people", "keepsakes", "fragments"]) {
+    await page.click(`.jtab[data-tab="${tab}"]`);
+    await page.waitForTimeout(200);
+    const m = await page.evaluate(() => {
+      const vw = innerWidth, vh = innerHeight;
+      const bad = [];
+      document.querySelectorAll("#journal-body .jentry").forEach((e, i) => {
+        const r = e.getBoundingClientRect();
+        const pos = getComputedStyle(e).position;
+        if (pos === "absolute" || pos === "fixed") bad.push(`entry ${i} is ${pos} (a scene rule leaked in)`);
+        else if (r.left < -1 || r.right > vw + 1 || r.width > vw + 1 || r.height > vh) {
+          bad.push(`entry ${i} out of bounds: ${JSON.stringify({ l: r.left | 0, r: r.right | 0, w: r.width | 0, h: r.height | 0 })}`);
+        }
+      });
+      return { count: document.querySelectorAll("#journal-body .jentry").length, bad,
+               scrollW: document.documentElement.scrollWidth, vw };
+    });
+    if (!m.count) fail(`journal/${tab}: rendered no entries`);
+    m.bad.forEach((b) => fail(`journal/${tab}: ${b}`));
+    if (m.scrollW > m.vw + 1) fail(`journal/${tab}: page scrolls horizontally`);
+    if (tab === "keepsakes") await shot(page, "6c-journal-keepsakes");
+    log(`journal/${tab}: ${m.count} entries, all in bounds`);
+  }
+  await context.close();
+}
+
+// ═══════════════════════════════════════════════════════════
 // 6 · Portrait rotate gate
 // ═══════════════════════════════════════════════════════════
 async function testRotate(browser) {
@@ -721,6 +778,7 @@ try {
   await testCompletable(browser);
   await testTwists(browser);
   await testChapter(browser);
+  await testJournal(browser);
   await testRotate(browser);
   await testViewports(browser);
 } catch (e) {
