@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1b2a3a" />
+  <meta name="screen-orientation" content="landscape" />
+  <title>မင်္ဂလာခရီး — Mingala Trail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&family=Padauk:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="burma">
+  <div id="app">
+    <!-- Portrait lock (phones) -->
+    <div id="rotate-overlay" class="rotate-overlay" hidden>
+      <div class="rotate-card">
+        <div class="rotate-icon" aria-hidden="true">📱</div>
+        <h2>ဘေးတိုက် လှည့်ပါ</h2>
+        <p>Rotate your phone <strong>landscape</strong><br/>to walk the trail</p>
+        <p class="rotate-hint">ခရီးဆက်ရန် ဖုန်းကို အလျားလိုက် လှည့်ပါ</p>
+      </div>
+    </div>
+
+    <!-- ===== Title ===== -->
+    <section id="start-screen" class="screen active">
+      <div class="paper-grain" aria-hidden="true"></div>
+      <div class="start-card">
+        <div class="logo">
+          <span class="logo-mark" id="logo-hero" aria-hidden="true"></span>
+          <p class="logo-mm">မင်္ဂလာခရီး</p>
+          <h1>Mingala<br/>Trail</h1>
+          <p class="tagline">အဖိုးရေးခဲ့တဲ့ စာ ဆယ်စောင်။ မြို့ ဆယ်မြို့။ ဘာကြောင့်လဲ မမေးနဲ့။</p>
+          <p class="tagline en">Ten letters. Ten towns. He didn't say why.</p>
+        </div>
+        <button id="btn-start" class="btn primary big">ခရီးစမယ် · New Trail</button>
+        <button id="btn-continue" class="btn big" hidden>ဆက်သွားမယ် · Continue</button>
+        <button id="btn-mute-menu" class="btn ghost mute-menu" title="Toggle sound">🔊 အသံ On</button>
+        <a class="hub-link" href="../../">← YGN Arcade</a>
+        <div class="how-to">
+          <h3>ကစားနည်း · How to Play</h3>
+          <ul>
+            <li><strong>လမ်းလျှောက်</strong> — arrows / WASD, ဖုန်းမှာ D-pad</li>
+            <li><strong>Space</strong> — စကားပြော · ကောက်ယူ · ဝင်မယ် &nbsp;·&nbsp; <strong>1–4</strong> ရွေးချယ်</li>
+            <li><strong>⏳ နာရီ</strong> နဲ့ <strong>ကျပ်</strong> — ပိုက်ဆံပေးပြီး အချိန်ချွေ၊ ဒါမှမဟုတ် အချိန်ပေးပြီး ပိုက်ဆံချွေ</li>
+            <li><strong>J</strong> မှတ်စုစာအုပ် · <strong>Esc</strong> pause</li>
+          </ul>
+        </div>
+        <p class="save-hint" id="save-hint"></p>
+      </div>
+    </section>
+
+    <!-- ===== Trail map ===== -->
+    <section id="map-screen" class="screen">
+      <div class="map-bg">
+        <div class="map-header">
+          <button id="btn-map-back" class="btn ghost">← ပြန်</button>
+          <h2 class="map-title" id="map-title">အဖိုးရဲ့ လမ်းကြောင်း</h2>
+          <button id="btn-map-journal" class="btn ghost">📖 မှတ်စု</button>
+        </div>
+        <div class="map-host" id="map-host"></div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter intro ===== -->
+    <div id="intro-overlay" class="overlay hidden">
+      <div class="modal intro-modal">
+        <div id="intro-emoji" class="end-emoji">🧭</div>
+        <p class="intro-chapter" id="intro-chapter"></p>
+        <h2 id="intro-title"></h2>
+        <p class="intro-region" id="intro-region"></p>
+        <p id="intro-desc" class="intro-desc"></p>
+        <div id="intro-task" class="intro-task"></div>
+        <button id="btn-intro-go" class="btn primary big">သွားမယ် · Go</button>
+        <button id="btn-intro-back" class="btn ghost">မြေပုံသို့</button>
+      </div>
+    </div>
+
+    <!-- ===== Chapter ===== -->
+    <section id="game-screen" class="screen">
+      <header class="hud">
+        <div class="hud-place">
+          <strong id="hud-place"></strong>
+          <small id="hud-area"></small>
+        </div>
+        <div class="hud-clock" id="hud-clock" title="ကျန်ရှိချိန် · Hours left">
+          <span class="clock-icon">⏳</span>
+          <span id="hud-hours">12</span>
+          <small id="hud-time"></small>
+        </div>
+        <div class="hud-purse" title="ပိုက်ဆံ · Kyat">
+          <span class="purse-icon">◈</span>
+          <span id="hud-kyat">0</span>
+        </div>
+        <div class="objective" id="objective">
+          <span class="objective-label" id="objective-tag">လုပ်ရန်</span>
+          <span id="objective-text"></span>
+        </div>
+        <div class="hud-right">
+          <div class="satchel" id="satchel"></div>
+          <button id="btn-journal" class="btn ghost" title="Route book (J)">📖</button>
+          <button id="btn-mute" class="btn ghost btn-mute" title="Mute">🔊</button>
+          <button id="btn-pause" class="btn ghost" title="Pause">❚❚</button>
+        </div>
+      </header>
+
+      <div class="stage" id="stage">
+        <div class="scene" id="scene">
+          <div class="world" id="world"></div>
+          <div class="scene-tint" id="scene-tint" aria-hidden="true"></div>
+          <div class="scene-vignette" id="scene-vignette" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div id="dialogue" class="dialogue hidden">
+        <div class="dlg-portrait" id="dlg-portrait"></div>
+        <div class="dlg-main">
+          <div class="dlg-who" id="dlg-who"></div>
+          <p class="dlg-mm" id="dlg-mm"></p>
+          <p class="dlg-en" id="dlg-en"></p>
+          <div class="dlg-choices hidden" id="dlg-choices"></div>
+        </div>
+        <span class="dlg-next hidden" id="dlg-next">▼</span>
+      </div>
+
+      <div class="controls" id="controls">
+        <div class="dpad" id="dpad">
+          <button class="dpad-btn up" data-dir="up" aria-label="Up">▲</button>
+          <button class="dpad-btn left" data-dir="left" aria-label="Left">◀</button>
+          <button class="dpad-btn right" data-dir="right" aria-label="Right">▶</button>
+          <button class="dpad-btn down" data-dir="down" aria-label="Down">▼</button>
+        </div>
+        <button id="btn-action" class="btn-action" disabled>
+          <span id="action-verb">စကားပြော</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== Route book ===== -->
+    <section id="journal-screen" class="screen">
+      <div class="journal-wrap">
+        <header class="journal-head">
+          <button id="btn-journal-back" class="btn ghost">← ပြန်</button>
+          <h2>မှတ်စုစာအုပ် · Route book</h2>
+          <span></span>
+        </header>
+        <nav class="journal-tabs" id="journal-tabs"></nav>
+        <div class="journal-body" id="journal-body"></div>
+      </div>
+    </section>
+
+    <!-- ===== Letter reader ===== -->
+    <div id="letter-overlay" class="overlay hidden">
+      <div class="letter-sheet">
+        <div class="letter-fold" aria-hidden="true"></div>
+        <p class="letter-to" id="letter-to"></p>
+        <div class="letter-body" id="letter-body"></div>
+        <p class="letter-sign">— ဦးဘငြိမ်း · U Ba Nyein</p>
+        <button id="btn-letter-close" class="btn primary">ခေါက်သိမ်းမယ် · Fold it away</button>
+      </div>
+    </div>
+
+    <!-- ===== Twist ===== -->
+    <div id="twist-overlay" class="overlay hidden">
+      <div class="twist-modal">
+        <header class="twist-head">
+          <h3 id="twist-title"></h3>
+          <p id="twist-hint"></p>
+        </header>
+        <div class="twist-stage" id="twist-stage"></div>
+        <footer class="twist-foot">
+          <div class="twist-meter"><div id="twist-fill" class="twist-fill"></div></div>
+          <button id="btn-twist-quit" class="btn ghost">ထွက်မယ်</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ===== Pause ===== -->
+    <div id="pause-overlay" class="overlay hidden">
+      <div class="modal">
+        <h2>ခဏရပ် · Paused</h2>
+        <p id="pause-hint" class="intro-desc"></p>
+        <button id="btn-resume" class="btn primary">ဆက်သွား</button>
+        <button id="btn-restart" class="btn">အခန်းပြန်စ</button>
+        <button id="btn-menu" class="btn ghost">မြေပုံ</button>
+      </div>
+    </div>
+
+    <!-- ===== Chapter end ===== -->
+    <div id="end-overlay" class="overlay hidden">
+      <div class="modal end-modal">
+        <div id="end-emoji" class="end-emoji">✉</div>
+        <h2 id="end-title"></h2>
+        <p id="end-msg" class="intro-desc"></p>
+        <div id="end-fragment" class="end-fragment"></div>
+        <button id="btn-next" class="btn primary">နောက်မြို့</button>
+        <button id="btn-end-menu" class="btn ghost">မြေပုံ</button>
+      </div>
+    </div>
+
+    <div id="wipe" class="wipe" aria-hidden="true"></div>
+    <div id="toast" class="toast" aria-live="polite"></div>
+  </div>
+
+  <script src="./art.js"></script>
+  <script src="./systems.js"></script>
+  <script src="./cities.js"></script>
+  <script src="./story.js"></script>
+  <script src="./twists.js"></script>
+  <script src="./map.js"></script>
+  <script src="./audio.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>

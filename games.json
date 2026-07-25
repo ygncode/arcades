@@ -14,14 +14,15 @@
       "status": "live"
     },
     {
-      "id": "example-puzzle",
-      "title": "Your Next Game",
-      "subtitle": "placeholder",
-      "emoji": "🧩",
-      "blurb": "Drop a new folder in games/, add an entry here, ship it.",
-      "tags": ["template"],
-      "cover": "linear-gradient(135deg, #37474f, #1a237e)",
-      "status": "coming-soon"
+      "id": "mingala-trail",
+      "title": "Mingala Trail",
+      "subtitle": "မင်္ဂလာခရီး",
+      "emoji": "🧭",
+      "blurb": "Walk Myanmar city by city as Phoe Chit — help someone in every town, one chapter at a time.",
+      "tags": ["adventure", "story", "myanmar"],
+      "cover": "linear-gradient(135deg, #1b4965 0%, #d9a441 55%, #8c3b2e 100%)",
+      "badge": "New",
+      "status": "live"
     }
   ]
 }

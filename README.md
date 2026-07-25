@@ -9,9 +9,20 @@ ygn-arcade/
 ├── hub.js
 ├── games.json       # catalog (add games here)
 └── games/
-    └── pagoda-patch/   # ခြံစောင့် — Plants vs Zombies style
+    ├── pagoda-patch/   # ခြံစောင့် — Plants vs Zombies style
+    │   ├── index.html
+    │   ├── game.js
+    │   ├── audio.js
+    │   └── style.css
+    └── mingala-trail/  # မင်္ဂလာခရီး — ten letters, ten towns
         ├── index.html
-        ├── game.js
+        ├── game.js     # engine: camera, parallax, dialogue runner, quests
+        ├── systems.js  # rules: hours, kyat, flags, route book
+        ├── cities.js   # world layout (where things stand)
+        ├── story.js    # all the writing (what they say)
+        ├── twists.js   # per-chapter minigames
+        ├── map.js      # the Myanmar map + transport choice
+        ├── art.js      # inline-SVG sprites, portraits, backdrops
         ├── audio.js
         └── style.css
 ```
@@ -92,9 +103,13 @@ Use `"status": "coming-soon"` for teaser cards that don't link yet.
 
 ## E2E tests
 
-The Playwright suite checks the hub, campaign navigation, portrait rotate gate,
-landscape layout, touch planting, shooting, damage, sun collection, pause/resume,
-shovel, mute, and responsive viewport bounds.
+Three Playwright scripts, run in sequence by `npm test`:
+
+| Script | Covers |
+|--------|--------|
+| `test:e2e:layout` | hub, campaign navigation, portrait rotate gate, landscape layout |
+| `test:e2e:gameplay` | Pagoda Patch — touch planting, shooting, damage, sun, pause/resume, shovel, mute, viewport bounds |
+| `test:e2e:mingala` | Mingala Trail — content linter, dialogue-graph validation, economy solvency, twist winnability, a full chapter played on touch, save persistence, rotate gate, viewport bounds |
 
 ```bash
 npm install
@@ -102,17 +117,25 @@ npm run install:browsers
 npm run dev
 
 # in another terminal
-npm test
+npm test                      # or: BASE_URL=http://localhost:3111 npm test
 ```
 
 Tested landscape sizes include 568×320, 667×375, 740×360, 844×390,
 and 1024×768. Generated screenshots are written to `e2e-shots/` and ignored by Git.
+
+Most of the Mingala Trail suite is **static analysis**, because that game is mostly data.
+It fails on: an unknown sprite/backdrop/portrait, an unresolvable dialogue, door or quest
+target, a missing translation, an unreachable or dead-end dialogue node, a quest step
+gated on a flag nothing ever sets, a solid prop parked in the walking lane, a twist that
+can't be won, or an economy in which a broke player could get stranded. Adding a chapter
+without running it is how you ship an unwinnable one.
 
 ## Games
 
 | ID | Title | Notes |
 |----|--------|--------|
 | `pagoda-patch` | Pagoda Patch (ခြံစောင့်) | PvZ-style campaign, Burmese theme |
+| `mingala-trail` | Mingala Trail (မင်္ဂလာခရီး) | 10-chapter narrative adventure. Deliver a dead postman's last ten letters across Myanmar. Side-scrolling towns, dialogue trees, an hours-vs-kyat economy. Adding a chapter is a data edit — see its [README](games/mingala-trail/README.md) |
 
 ## License
 
