@@ -14,6 +14,17 @@
       "status": "live"
     },
     {
+      "id": "upstream",
+      "title": "Upstream",
+      "subtitle": "မြစ်ဆုံခရီး",
+      "emoji": "🛶",
+      "blurb": "3D river-runner. Pilot the Shwe Hintha from Yangon up the Ayeyarwady to Myitsone — ten legs, ten towns, one promise.",
+      "tags": ["3D", "runner", "myanmar"],
+      "cover": "linear-gradient(135deg, #0e3b44 0%, #2e7d5e 45%, #e8b23a 100%)",
+      "badge": "New",
+      "status": "live"
+    },
+    {
       "id": "mingala-trail",
       "title": "Mingala Trail",
       "subtitle": "မင်္ဂလာခရီး",

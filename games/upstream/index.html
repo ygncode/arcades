@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0e2233" />
+  <meta name="screen-orientation" content="landscape" />
+  <title>မြစ်ဆုံခရီး — Upstream</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&family=Padauk:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js" } }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Portrait lock (phones) -->
+    <div id="rotate-overlay" class="rotate-overlay" hidden>
+      <div class="rotate-card">
+        <div class="rotate-icon" aria-hidden="true">📱</div>
+        <h2>ဘေးတိုက် လှည့်ပါ</h2>
+        <p>Rotate your phone <strong>landscape</strong><br/>to run the river</p>
+        <p class="rotate-hint">ခရီးဆက်ရန် ဖုန်းကို အလျားလိုက် လှည့်ပါ</p>
+      </div>
+    </div>
+
+    <!-- 3D stage: canvas lives here permanently -->
+    <div id="stage" class="stage" aria-hidden="true"></div>
+
+    <!-- ===== Title ===== -->
+    <section id="title-screen" class="screen active">
+      <div class="title-card">
+        <div class="logo">
+          <span class="logo-boat" aria-hidden="true">🛶</span>
+          <p class="logo-mm">မြစ်ဆုံခရီး</p>
+          <h1>Upstream</h1>
+          <p class="tagline">ရန်ကုန်ကနေ မြစ်ဆုံအထိ — မြစ်ကို ဆန်ပြီး အိမ်ကို သွားမယ်။</p>
+          <p class="tagline en">Yangon to Myitsone, against the current. Ten legs. One promise.</p>
+        </div>
+        <button id="btn-new" class="btn primary big">ခရီးစမယ် · New Journey</button>
+        <button id="btn-continue" class="btn big" hidden>ဆက်သွားမယ် · Continue</button>
+        <button id="btn-mute-menu" class="btn ghost" title="Toggle sound">🔊 အသံ On</button>
+        <a class="hub-link" href="../../">← YGN Arcade</a>
+        <div class="how-to">
+          <h3>ကစားနည်း · How to Play</h3>
+          <ul>
+            <li><strong>◀ ▶ / A D</strong> — ပဲ့ကိုင် · steer। ဖုန်းမှာ — ရေပြင်ကို ဆွဲ · drag the water</li>
+            <li><strong>▲ / W / hold 🔥</strong> — အရှိန်မြှင့် · boost (ပိုမြန်၊ ပိုကြမ်း)</li>
+            <li>အသပြာ <strong>◉</strong> စု — မြို့ရောက်ရင် လှေ အဆင့်မြှင့်</li>
+            <li><strong>Esc</strong> — ခဏရပ် · pause</li>
+          </ul>
+        </div>
+        <p class="save-hint" id="save-hint"></p>
+      </div>
+    </section>
+
+    <!-- ===== Route map ===== -->
+    <section id="map-screen" class="screen">
+      <div class="map-card">
+        <header class="map-head">
+          <button id="btn-map-back" class="btn ghost">← ပြန်</button>
+          <h2>မြစ်ကြောင်း · The River Road</h2>
+          <div class="map-purse" title="ကျပ် · Coins"><span aria-hidden="true">◉</span> <b id="map-coins">0</b></div>
+        </header>
+        <ol id="route-list" class="route-list"></ol>
+        <button id="btn-depart" class="btn primary big">ထွက်မယ် · Cast Off</button>
+      </div>
+    </section>
+
+    <!-- ===== HUD (playing) ===== -->
+    <div id="hud" class="hud" hidden>
+      <div class="hud-left">
+        <div class="hearts" id="hearts" aria-label="Hull"></div>
+        <div class="hud-coins" title="ကျပ် · Coins"><span aria-hidden="true">◉</span><b id="hud-coins">0</b></div>
+      </div>
+      <div class="hud-center">
+        <div class="leg-label" id="leg-label"></div>
+        <div class="progress"><div class="progress-fill" id="progress-fill"></div>
+          <span class="progress-boat" id="progress-boat" aria-hidden="true">🛶</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <button id="btn-mute" class="btn ghost hud-btn" title="Mute">🔊</button>
+        <button id="btn-pause" class="btn ghost hud-btn" title="Pause (Esc)">❚❚</button>
+      </div>
+    </div>
+
+    <!-- Touch controls -->
+    <div id="touch-ui" hidden>
+      <button id="btn-boost" class="btn-boost" aria-label="Boost">🔥</button>
+    </div>
+
+    <div id="hazard-banner" class="hazard-banner" hidden>
+      <p class="hz-mm" id="hz-mm"></p>
+      <p class="hz-en" id="hz-en"></p>
+    </div>
+
+    <!-- ===== Story / town overlay ===== -->
+    <div id="town-overlay" class="overlay hidden">
+      <div class="town-modal">
+        <header class="town-head">
+          <span class="town-emoji" id="town-emoji" aria-hidden="true">🏘️</span>
+          <div>
+            <h2 id="town-title"></h2>
+            <p class="town-sub" id="town-sub"></p>
+          </div>
+        </header>
+        <div class="dlg" id="town-dlg">
+          <div class="dlg-portrait" id="dlg-portrait" aria-hidden="true"></div>
+          <div class="dlg-main">
+            <div class="dlg-who" id="dlg-who"></div>
+            <p class="dlg-mm" id="dlg-mm"></p>
+            <p class="dlg-en" id="dlg-en"></p>
+          </div>
+          <button class="dlg-next" id="btn-dlg-next">▼</button>
+        </div>
+        <div class="shop hidden" id="shop">
+          <h3 class="shop-title">လှေပြင်ဆိုင် · Boatwright</h3>
+          <div class="shop-grid" id="shop-grid"></div>
+        </div>
+        <footer class="town-foot">
+          <button id="btn-town-continue" class="btn primary big">ဆက်သွားမယ် · Onward</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ===== Pause ===== -->
+    <div id="pause-overlay" class="overlay hidden">
+      <div class="modal">
+        <h2>ခဏရပ် · Paused</h2>
+        <p class="modal-sub" id="pause-leg"></p>
+        <button id="btn-resume" class="btn primary big">ဆက်သွား · Resume</button>
+        <button id="btn-retry" class="btn">ဒီအပိုင်း ပြန်စ · Restart leg</button>
+        <button id="btn-quit" class="btn ghost">မြေပုံသို့ · Route map</button>
+      </div>
+    </div>
+
+    <!-- ===== Sunk ===== -->
+    <div id="over-overlay" class="overlay hidden">
+      <div class="modal">
+        <div class="over-emoji" aria-hidden="true">🫧</div>
+        <h2>လှေ နစ်သွားပြီ…</h2>
+        <p class="modal-sub">The Shwe Hintha is taking on water. The river gives another chance.</p>
+        <button id="btn-over-retry" class="btn primary big">ပြန်ကြိုးစားမယ် · Try again</button>
+        <button id="btn-over-map" class="btn ghost">မြေပုံသို့ · Route map</button>
+      </div>
+    </div>
+
+    <!-- ===== Finale ===== -->
+    <div id="finale-overlay" class="overlay hidden">
+      <div class="modal finale-modal">
+        <div class="finale-emoji" aria-hidden="true">🏺</div>
+        <h2 id="finale-title">မြစ်ဆုံ</h2>
+        <div id="finale-body" class="finale-body"></div>
+        <button id="btn-finale-next" class="btn primary big">…</button>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div id="fader" class="fader" aria-hidden="true"></div>
+  </div>
+
+  <script src="./legs.js"></script>
+  <script src="./story.js"></script>
+  <script src="./audio.js"></script>
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
