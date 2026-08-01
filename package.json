@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "serve . -l 3000",
     "test": "npm run test:e2e",
-    "test:e2e": "npm run test:e2e:layout && npm run test:e2e:gameplay && npm run test:e2e:mingala && npm run test:e2e:upstream",
+    "test:e2e": "npm run test:e2e:layout && npm run test:e2e:gameplay && npm run test:e2e:mingala && npm run test:e2e:upstream && npm run test:e2e:teafortwo",
     "test:e2e:layout": "node tests/e2e/layout.mjs",
     "test:e2e:gameplay": "node tests/e2e/gameplay.mjs",
     "test:e2e:mingala": "node tests/e2e/mingala.mjs",
     "test:e2e:upstream": "node tests/e2e/upstream.mjs",
+    "test:e2e:teafortwo": "node tests/e2e/tea-for-two.mjs",
     "install:browsers": "playwright install chromium"
   },
   "repository": {

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6e7c8" />
+  <title>လက်ဖက်ရည်နှစ်ဆိုင် — Tea for Two · Game Theory</title>
+  <meta name="description" content="A game-theory classroom on a Yangon tea-shop street. Play the price war, the shared pond, the split — and learn why people choose what they choose." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Padauk:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== Decorative street backdrop ===== -->
+    <div class="backdrop" aria-hidden="true">
+      <div class="sky-glow"></div>
+      <div class="street-scene">
+        <svg class="pagoda" viewBox="0 0 220 120" preserveAspectRatio="none">
+          <path d="M110 2 L124 26 L118 26 L126 46 L116 46 L124 66 L104 62 L96 84 L84 70 L90 58 L74 52 L96 46 L102 34 L92 30 Z" fill="#7d5a3a"/>
+          <path d="M110 2 L124 26 L110 24 L96 26 Z" fill="#c9a04e"/>
+        </svg>
+        <div class="awning a1"></div>
+        <div class="awning a2"></div>
+        <div class="awning a3"></div>
+      </div>
+      <div class="steam s1"></div>
+      <div class="steam s2"></div>
+      <div class="steam s3"></div>
+    </div>
+
+    <!-- ===== Start screen ===== -->
+    <section id="start-screen" class="screen active">
+      <header class="top-bar">
+        <a class="hub-link" href="../../">← YGN Arcade</a>
+        <div class="top-actions">
+          <span id="badge-mini" class="badge-mini" title="ဘွဲ့များ · Badges"></span>
+          <button id="btn-sound" class="icon-btn" title="Sound">🔊</button>
+        </div>
+      </header>
+
+      <div class="start-wrap">
+        <div class="title-cloth" aria-hidden="true"></div>
+        <div class="title-card">
+          <p class="eyebrow">ဂိမ်းသီအိုရီ သင်ခန်းစာ · a game-theory classroom</p>
+          <h1 class="game-title">
+            <span class="tt mm">လက်ဖက်ရည်နှစ်ဆိုင်</span>
+            <span class="tt en">Tea for <em>Two</em></span>
+          </h1>
+          <p class="tagline">ရန်ကုန် လက်ဖက်ရည်ဆိုင် လမ်းမှာ လူတွေ ဘာကြောင့် ဒီလိုဆုံးဖြတ်ကြလဲ ကစားရင်း သင်ယူမယ်။</p>
+          <p class="tagline en">Two tea shops. Ten gold coins. A whole street of hard choices — play them, and learn the math behind human behaviour.</p>
+
+          <div class="duel" aria-hidden="true">
+            <div class="duel-avatar" id="duel-left"></div>
+            <div class="duel-table">
+              <span class="duel-cup">🫖</span>
+              <span class="duel-cup">🍵</span>
+            </div>
+            <div class="duel-avatar" id="duel-right"></div>
+          </div>
+
+          <nav class="lesson-menu" aria-label="Lessons">
+            <button class="lesson-card" data-lesson="l1">
+              <span class="lc-emoji">🍵</span>
+              <span class="lc-body">
+                <strong>ဈေးစစ်ပွဲ <em>The Price War</em></strong>
+                <small>တစ်ခါတည်း ဆုံးဖြတ်ပွဲ · one shot</small>
+              </span>
+              <span class="lc-badge" data-badge="l1"></span>
+            </button>
+            <button class="lesson-card" data-lesson="l2">
+              <span class="lc-emoji">🔁</span>
+              <span class="lc-body">
+                <strong>တစ်ပတ်တာ အတွဲ <em>The Week</em></strong>
+                <small>ထပ်ခါထပ်ခါ ကစားပွဲ · repeated</small>
+              </span>
+              <span class="lc-badge" data-badge="l2"></span>
+            </button>
+            <button class="lesson-card" data-lesson="l3">
+              <span class="lc-emoji">🐟</span>
+              <span class="lc-body">
+                <strong>မျှဝေတဲ့ကန် <em>The Shared Pond</em></strong>
+                <small>အားလုံးပိုင် အရင်းအမြစ် · the commons</small>
+              </span>
+              <span class="lc-badge" data-badge="l3"></span>
+            </button>
+            <button class="lesson-card" data-lesson="l4">
+              <span class="lc-emoji">⚖️</span>
+              <span class="lc-body">
+                <strong>ခွဲဝေပွဲ <em>The Split</em></strong>
+                <small>မျှတမှုအကြောင်း · fairness</small>
+              </span>
+              <span class="lc-badge" data-badge="l4"></span>
+            </button>
+            <button class="lesson-card wide" data-lesson="theory">
+              <span class="lc-emoji">📖</span>
+              <span class="lc-body">
+                <strong>သီအိုရီခန်း <em>The Theory Room</em></strong>
+                <small>အဘိဓာန် · glossary — Nash equilibrium, dominant strategy စတာတွေ</small>
+              </span>
+            </button>
+          </nav>
+
+          <div class="badge-shelf">
+            <p class="shelf-title">ဘွဲ့တန်း · Badges</p>
+            <div id="badge-shelf" class="shelf"></div>
+            <p class="shelf-note" id="shelf-note"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Lesson shell ===== -->
+    <section id="lesson-screen" class="screen">
+      <header class="l-head">
+        <button id="btn-lesson-back" class="btn ghost" title="Back">← ပြန်</button>
+        <div class="l-title">
+          <h2 id="lesson-title"></h2>
+          <span id="lesson-kicker"></span>
+        </div>
+        <div class="l-right">
+          <span id="lesson-chip" class="chip"></span>
+          <button id="btn-lesson-sound" class="icon-btn small" title="Sound">🔊</button>
+        </div>
+      </header>
+      <main id="lesson-body" class="l-body"></main>
+    </section>
+
+    <!-- ===== Quiz overlay ===== -->
+    <div id="quiz-overlay" class="overlay hidden">
+      <div class="quiz-modal">
+        <p class="quiz-kicker" id="quiz-kicker"></p>
+        <h3 id="quiz-question"></h3>
+        <div id="quiz-options" class="quiz-options"></div>
+        <div id="quiz-feedback" class="quiz-feedback" hidden></div>
+        <button id="btn-quiz-next" class="btn primary" hidden>ဆက်မယ် · Next</button>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+  </div>
+
+  <script src="./portraits.js"></script>
+  <script src="./theory.js"></script>
+  <script src="./lessons.js"></script>
+  <script src="./game.js"></script>
+</body>
+</html>

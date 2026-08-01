@@ -34,6 +34,17 @@
       "cover": "linear-gradient(135deg, #1b4965 0%, #d9a441 55%, #8c3b2e 100%)",
       "badge": "New",
       "status": "live"
+    },
+    {
+      "id": "tea-for-two",
+      "title": "Tea for Two",
+      "subtitle": "လက်ဖက်ရည်နှစ်ဆိုင်",
+      "emoji": "🍵",
+      "blurb": "A game-theory classroom on a Yangon tea-shop street. Play the price war, the shared pond, the split — and learn why people choose what they choose.",
+      "tags": ["education", "strategy", "myanmar"],
+      "cover": "linear-gradient(135deg, #b03a2e 0%, #d9a441 50%, #4a7c59 100%)",
+      "badge": "New",
+      "status": "live"
     }
   ]
 }

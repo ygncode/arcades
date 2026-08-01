@@ -111,6 +111,7 @@ Four Playwright scripts, run in sequence by `npm test`:
 | `test:e2e:gameplay` | Pagoda Patch — touch planting, shooting, damage, sun, pause/resume, shovel, mute, viewport bounds |
 | `test:e2e:mingala` | Mingala Trail — content linter, dialogue-graph validation, economy solvency, twist winnability, a full chapter played on touch, save persistence, rotate gate, viewport bounds |
 | `test:e2e:upstream` | Upstream — leg/story/upgrade data lint, spawn-plan bounds + determinism for all ten legs, steering, pause, damage, shop purchase, save persistence, sinking + retry, Pakokku compass gift, finale + free-run unlock, rotate gate, viewport bounds |
+| `test:e2e:teafortwo` | Tea for Two — game-theory data lint (payoff sanity, tournament determinism + result), every lesson played to completion, badge persistence, mobile portrait layout |
 
 ```bash
 npm install
@@ -138,6 +139,7 @@ without running it is how you ship an unwinnable one.
 | `pagoda-patch` | Pagoda Patch (ခြံစောင့်) | PvZ-style campaign, Burmese theme |
 | `upstream` | Upstream (မြစ်ဆုံခရီး) | Three.js 3D river-runner. Pilot a longtail boat from Yangon up the Ayeyarwady to Myitsone in ten legs — including a Pakokku homecoming chapter. See its [README](games/upstream/README.md) |
 | `mingala-trail` | Mingala Trail (မင်္ဂလာခရီး) | 10-chapter narrative adventure. Deliver a dead postman's last ten letters across Myanmar. Side-scrolling towns, dialogue trees, an hours-vs-kyat economy. Adding a chapter is a data edit — see its [README](games/mingala-trail/README.md) |
+| `tea-for-two` | Tea for Two (လက်ဖက်ရည်နှစ်ဆိုင်) | Game-theory classroom on a tea-shop street: price-war prisoner's dilemma, iterated PD vs five AI shopkeepers, a shared fish pond, and an ultimatum split — plus a bilingual theory glossary. See its [README](games/tea-for-two/README.md) |
 
 ## License
 
